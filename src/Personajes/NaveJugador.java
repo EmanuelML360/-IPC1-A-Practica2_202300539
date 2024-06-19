@@ -1,75 +1,67 @@
 package Personajes;
 
-import ComponentesDeJuego.ContadorDePuntos;
+import ComponentesDeJuego.ListaItems;
 import ComponentesDeJuego.Temporizador;
 import Pantallas.PantallaJuego;
 import java.awt.event.ActionEvent;
 import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+
 /**
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
+
 public class NaveJugador extends Thread {
     
-    PantallaJuego pantallaJuego;
-    String points_;
-    int posicionY, posicionX, points;
-    Temporizador temporizador;
-    ContadorDePuntos contadorDePuntos;
-    Bala bala;
+    public PantallaJuego pantallaJuego;
+    public int posicionY, posicionX, points, time;
+    public Temporizador temporizador;
+    public ListaItems listaItems = ListaItems.getInstance();
+    public Bala bala;
     private volatile boolean activo = true;
     
     public NaveJugador(PantallaJuego pantallaJuego, Temporizador temporizador, Bala bala){
         this.pantallaJuego = pantallaJuego;
         this.temporizador = temporizador;
-        this.bala = bala;
-        points_ = this.pantallaJuego.points.getText();
-        points = Integer.parseInt(points_);
+        this.listaItems = ListaItems.getInstance();
+        this.bala = bala; 
         posicionY = this.pantallaJuego.naveJugador.getY();
         posicionX = this.pantallaJuego.naveJugador.getX();
-        this.pantallaJuego.nave = this.pantallaJuego.naveJugador.getBounds();
-        
+        this.pantallaJuego.nave = this.pantallaJuego.naveJugador.getBounds();      
     }
-    
-    
-    public void run() {
-        
+
+    public void run() {    
         try {   
             while (activo){
-                
-                sleep(50);
+                sleep(20);
                 this.pantallaJuego.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "UPAction");
                 this.pantallaJuego.panel.getActionMap().put("UPAction", new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (posicionY > 85){
-                            posicionY -= 60;
+                        if (posicionY > 110){
+                            posicionY -= 20;
                             pantallaJuego.naveJugador.setLocation(posicionX, posicionY);
                             pantallaJuego.nave = pantallaJuego.naveJugador.getBounds();
                             pantallaJuego.naveJugador.repaint();
                         }
                     }
                 });
-
                 this.pantallaJuego.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "DOWNAction");
                 this.pantallaJuego.panel.getActionMap().put("DOWNAction", new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (posicionY < 638){
-                            posicionY += 60;
+                        if (posicionY < 630){
+                            posicionY += 20;
                             pantallaJuego.naveJugador.setLocation(posicionX, posicionY);
                             pantallaJuego.nave = pantallaJuego.naveJugador.getBounds();
                             pantallaJuego.naveJugador.repaint();
                         }
                     }
                 });
-                
                 this.pantallaJuego.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "SPACEAction");
                 this.pantallaJuego.panel.getActionMap().put("SPACEAction", new AbstractAction() {
                     @Override
@@ -78,40 +70,64 @@ public class NaveJugador extends Thread {
                             pantallaJuego.bala.setLocation(30, posicionY);
                             pantallaJuego.bala.repaint();
                             Bala Bala = new Bala(pantallaJuego);
-                            Bala.start();
-                            
+                            Bala.start();   
                         }else {
                             pantallaJuego.Bala.activo = true;
                             pantallaJuego.bala.setLocation(30, posicionY);
                             pantallaJuego.bala.repaint();
                             pantallaJuego.Bala.balaX = pantallaJuego.bala.getX();
-                        }
-                        
+                        }   
                     }
                 });
-                if (temporizador.segundos == 0){
+                if (temporizador.segundos < 0){
                     temporizador.detenerTemporizador();
+                    this.Detener();
+                    this.pantallaJuego.Bala.Detener();
                 }
-                
-                if (this.pantallaJuego.nave.intersects(this.pantallaJuego.item_)){
-                    sleep(250);
-                    this.pantallaJuego.item.setVisible(false);
-                    this.pantallaJuego.item.setLocation(-1, posicionY);
-                    this.pantallaJuego.repaint();
-                    points += 10;
-                    String _points = String.valueOf(points);
-                    this.pantallaJuego.points.setText(_points);
-                    this.pantallaJuego.points.repaint();
-                    
+                if (this.pantallaJuego.nave.intersects(this.pantallaJuego.item_)) {
+                    try {
+                        sleep(250);
+                        int points = Integer.parseInt(this.pantallaJuego.points.getText());
+                        int time = Integer.parseInt(this.pantallaJuego.time.getText());
+                        this.pantallaJuego.item.setVisible(false);
+                        this.pantallaJuego.item.setLocation(-40, 0);
+                        this.pantallaJuego.repaint();
+                        synchronized (listaItems) {
+                            for (int i = 0; i < listaItems.getSize(); i++) {
+                                Item currentItem = listaItems.getItem(i);
+                                int currentTipo = currentItem.getTipo();
+                                if (currentTipo == 1) {
+                                    points += 10;
+                                    listaItems.eliminar(i);
+                                } else if (currentTipo == 2) {
+                                    points -= 10;
+                                    listaItems.eliminar(i);
+                                } else if (currentTipo == 3) {
+                                    time += 10;
+                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.temporizador.setSegundo(time);
+                                } else if (currentTipo == 4) {
+                                    time -= 10;
+                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.temporizador.setSegundo(time);
+                                }
+                            }
+                        }
+                        this.pantallaJuego.points.setText(String.valueOf(points));
+                        this.pantallaJuego.time.setText(String.valueOf(time));
+                        this.pantallaJuego.points.repaint();
+                        this.pantallaJuego.time.repaint();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Error al actualizar puntos o tiempo: " + e.getMessage());
+                    }
                 }
+
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            Thread.currentThread().interrupt();
         }
     }
-
-
-    
+ 
     public void Detener() {
         activo = false;
     }

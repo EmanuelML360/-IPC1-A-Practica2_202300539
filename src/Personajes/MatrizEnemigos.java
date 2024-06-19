@@ -1,12 +1,9 @@
 package Personajes;
 
 import Pantallas.PantallaJuego;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
@@ -15,99 +12,87 @@ import javax.swing.SwingConstants;
  */
 public class MatrizEnemigos extends Thread{
     
-    public int columnas, filas;
     public Enemigo[][] enemigos;
     public static MatrizEnemigos instance;
     public Enemigo enemigo1, enemigo2, enemigo3;
-    private PantallaJuego pantallaJuego;
+    public PantallaJuego pantallaJuego;
     public volatile boolean activo = true;
-    
-    public MatrizEnemigos(int filas, int columnas){
-        this.filas = filas;
-        this.columnas = columnas;
-        this.enemigos = new Enemigo[filas][columnas];
-        /*
-        setLayout(new GridLayout(filas, columnas));
-        */
-    }
-    
-    
-    
+    public int movimiento = 0;
+  
     public MatrizEnemigos(PantallaJuego pantallaJuego){
         this.enemigos = new Enemigo[8][5];
         this.pantallaJuego = pantallaJuego;
     }
     
-    
     public void run(){
         try {
             while (activo){
-                sleep(250);
-                int movimiento = 0;
-                outerLoop:
+                sleep(1000);
                 for (int i = 0; i < 8; i++){
                     for (int j = 0; j < 5; j++){
                         int posX = (int) (this.enemigos[i][j].getBounds().getX());
                         int posY = (int) (this.enemigos[i][j].getBounds().getY());
                         switch (movimiento){
                             case 0:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posX -= 60;
-                                movimiento += 1;
+                                posY -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 1:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posY -= 60;
-                                movimiento += 1;
+                                posX -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 2:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posX -= 60;
-                                movimiento += 1;
+                                posY -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 3:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posY += 60;
-                                movimiento += 1;
+                                posX += 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 4:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posX -= 60;
-                                movimiento += 1;
+                                posY -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 5:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posY += 60;
-                                movimiento += 1;
+                                posX += 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 6:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posX -= 60;
-                                movimiento += 1;
+                                posY -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 7:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posY -= 60;
-                                movimiento += 1;
+                                posX -= 0;
+                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 break;
                             case 8:
-                                this.enemigos[i][j].setBounds(posX, posY, 50, 50);
                                 posX -= 60;
-                                movimiento += 1;
-                                break;
-                            case 9:
+                                posY -= 0;
                                 this.enemigos[i][j].setBounds(posX, posY, 50, 50);
-                                posY -= 60;
                                 movimiento = 0;
                                 break;
+                            default:
                         }
-                        
+                        if (i == 7 && j == 4){
+                            movimiento++;
+                        }
                     }
                 }
-                sleep(2000);
+                sleep(2300);
+                if (enemigos.length <= 0){
+                    Detener();
+                }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            Thread.currentThread().interrupt();
         }
     }
     
@@ -128,9 +113,9 @@ public class MatrizEnemigos extends Thread{
             for (int j = 0; j < 5; j++){
                 if (j < 1){
                     enemigo1 = new Enemigo(2, 10, 1);
-                    enemigo1.setBounds(posX, posY, 50, 50);
+                    enemigo1.setBounds(posX, posY, 40, 40);
                     ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase1.png"));
-                    Image imgTamaño = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+                    Image imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                     enemigo1.setHorizontalAlignment(SwingConstants.CENTER);
                     enemigo1.setVerticalAlignment(SwingConstants.CENTER);
                     ImageIcon imgenemigo1 = new ImageIcon(imgTamaño);
@@ -143,9 +128,9 @@ public class MatrizEnemigos extends Thread{
                     
                 } else if (j < 3){
                     enemigo2 = new Enemigo(3, 20,2);
-                    enemigo2.setBounds(posX, posY, 50, 50);
+                    enemigo2.setBounds(posX, posY, 40, 40);
                     ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase2.png"));
-                    Image imgTamaño = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+                    Image imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                     enemigo2.setHorizontalAlignment(SwingConstants.CENTER);
                     enemigo2.setVerticalAlignment(SwingConstants.CENTER);
                     ImageIcon imgenemigo2 = new ImageIcon(imgTamaño);
@@ -157,9 +142,9 @@ public class MatrizEnemigos extends Thread{
                     posX += 60;
                 } else {
                     enemigo3 = new Enemigo(4, 30,3);
-                    enemigo3.setBounds(posX, posY, 50, 50);
+                    enemigo3.setBounds(posX, posY, 40, 40);
                     ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase3.png"));
-                    Image imgTamaño = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+                    Image imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                     enemigo3.setHorizontalAlignment(SwingConstants.CENTER);
                     enemigo3.setVerticalAlignment(SwingConstants.CENTER);
                     ImageIcon imgenemigo3 = new ImageIcon(imgTamaño);
@@ -175,8 +160,7 @@ public class MatrizEnemigos extends Thread{
             posX -= 300;
         }
     }
-    
-    
+       
     public void Detener(){
         activo = false;
     }
