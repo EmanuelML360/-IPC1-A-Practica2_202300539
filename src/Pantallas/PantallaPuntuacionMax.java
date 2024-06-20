@@ -79,7 +79,7 @@ public class PantallaPuntuacionMax extends JFrame{
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal(1);
                         pantallaPrincipal.setVisible(true);
                         dispose();  
                     }

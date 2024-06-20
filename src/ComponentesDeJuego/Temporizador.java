@@ -1,7 +1,6 @@
 package ComponentesDeJuego;
 
-import Pantallas.PantallaJuego;
-import Pantallas.VentanaFinal;
+import Pantallas.*;
 import java.io.Serializable;
 
 /**

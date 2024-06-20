@@ -20,20 +20,12 @@ import javax.swing.KeyStroke;
 
 public class AccionesTeclas extends Thread implements Serializable{
     
-    public MatrizEnemigos matrizEnemigos;
     public Serializar serializar;
     public PantallaJuego pantallaJuego;
-    public NaveJugador naveJugador;
-    public Temporizador temporizador; 
-    public Bala bala;
     public volatile boolean activo = true;
     
-    public AccionesTeclas(PantallaJuego pantallaJuego, Temporizador temporizador, NaveJugador naveJugador, Bala bala, MatrizEnemigos matrizEnemigos){
+    public AccionesTeclas(PantallaJuego pantallaJuego){
        this.pantallaJuego = pantallaJuego;
-       this.naveJugador = naveJugador;
-       this.temporizador = temporizador;
-       this.matrizEnemigos = matrizEnemigos;
-       this.bala = bala;
     }
     
     public void run(){
@@ -44,22 +36,15 @@ public class AccionesTeclas extends Thread implements Serializable{
                 this.pantallaJuego.panel.getActionMap().put("sAction", new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        temporizador.detenerTemporizador();
-                        temporizador.interrupt();
+                        pantallaJuego.temporizador.detenerTemporizador();
                         pantallaJuego.Item.Detener();
-                        pantallaJuego.Item.interrupt();
                         pantallaJuego.NaveJugador.Detener();
-                        pantallaJuego.NaveJugador.interrupt();
                         pantallaJuego.Bala.DetenerBala();
-                        pantallaJuego.Bala.interrupt();
                         pantallaJuego.matrizEnemigos.Detener();
-                        pantallaJuego.matrizEnemigos.interrupt();
                         pantallaJuego.accionesTeclas.Detener();
-                        pantallaJuego.accionesTeclas.interrupt();
-                        pantallaJuego.dispose();
                         serializar = new Serializar(pantallaJuego);
                         serializar.EscribirArchivoBIN();
-                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal(1);
                         pantallaPrincipal.setVisible(true);
                         pantallaJuego.dispose();    
                     }
@@ -68,21 +53,14 @@ public class AccionesTeclas extends Thread implements Serializable{
                 this.pantallaJuego.panel.getActionMap().put("escAction", new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {  
-                        temporizador.detenerTemporizador();
-                        temporizador.interrupt();
-                        naveJugador.Detener();
-                        naveJugador.interrupt();
-                        bala.DetenerBala();
-                        bala.interrupt();
-                        matrizEnemigos.Detener();
-                        matrizEnemigos.interrupt();
+                        pantallaJuego.temporizador.detenerTemporizador();
+                        pantallaJuego.NaveJugador.Detener();
+                        pantallaJuego.Bala.DetenerBala();
+                        pantallaJuego.matrizEnemigos.Detener();
                         pantallaJuego.Item.Detener();
-                        pantallaJuego.Item.interrupt();
-                        Detener();
-                        interrupt();
-                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+                        pantallaJuego.accionesTeclas.Detener();
+                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal(1);
                         pantallaPrincipal.setVisible(true);
-                        pantallaJuego.removeAll();
                         pantallaJuego.dispose();                        
                     }
                 });  

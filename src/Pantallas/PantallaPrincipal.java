@@ -1,10 +1,12 @@
 package Pantallas;
 
+import ComponentesDeJuego.*;
+import Personajes.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
+import java.util.ArrayList;
+import javax.swing.*;
 
 /**
  *
@@ -13,8 +15,10 @@ import javax.swing.SwingUtilities;
 
 public class PantallaPrincipal extends javax.swing.JFrame {
     
-    public PantallaPrincipal() {
-        
+    public int entrada;
+    
+    public PantallaPrincipal(int entrada) {
+        this.entrada = entrada;
         initComponents();
         this.setLocationRelativeTo(null);
 
@@ -183,8 +187,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 dispose();
+                entrada++;
                 PantallaJuego pantallaJuego = new PantallaJuego();
                 pantallaJuego.setVisible(true);
+                if (entrada > 1){
+                    pantallaJuego.temporizador = new Temporizador(pantallaJuego);
+                    pantallaJuego.temporizador.start();
+                    pantallaJuego.Bala = new Bala(pantallaJuego);
+                    pantallaJuego.Bala.start();
+                    pantallaJuego.matrizEnemigos = new MatrizEnemigos(pantallaJuego);
+                    pantallaJuego.matrizEnemigos.crearMatriz();
+                    pantallaJuego.matrizEnemigos.start();
+                    pantallaJuego.listaItems = new ListaItems();;
+                    pantallaJuego.listaJugadores = new ListaJugadores();
+                    pantallaJuego.Item = new Item(pantallaJuego);
+                    pantallaJuego.Item.start();
+                    pantallaJuego.NaveJugador = new NaveJugador(pantallaJuego);
+                    pantallaJuego.NaveJugador.start();
+                    pantallaJuego.accionesTeclas = new AccionesTeclas(pantallaJuego);
+                    pantallaJuego.accionesTeclas.start();
+                    
+                }
                 pantallaJuego.iniciarJuego();
             }
         });

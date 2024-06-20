@@ -1,17 +1,11 @@
 package Personajes;
 
-import ComponentesDeJuego.ListaItems;
-import ComponentesDeJuego.Temporizador;
-import Pantallas.PantallaJuego;
-import Pantallas.VentanaFinal;
+import ComponentesDeJuego.*;
+import Pantallas.*;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import static java.lang.Thread.sleep;
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 /**
  *
@@ -21,17 +15,11 @@ import javax.swing.KeyStroke;
 public class NaveJugador extends Thread implements Serializable{
     
     public PantallaJuego pantallaJuego;
-    public int posicionY, posicionX, points, time;
-    public Temporizador temporizador;
-    public ListaItems listaItems = ListaItems.getInstance();
-    public Bala bala;
+    public int posicionY, posicionX, points, time;;
     public volatile boolean activo = true;
     
-    public NaveJugador(PantallaJuego pantallaJuego, Temporizador temporizador, Bala bala){
+    public NaveJugador(PantallaJuego pantallaJuego){
         this.pantallaJuego = pantallaJuego;
-        this.temporizador = temporizador;
-        this.listaItems = ListaItems.getInstance();
-        this.bala = bala; 
         posicionY = this.pantallaJuego.naveJugador.getY();
         posicionX = this.pantallaJuego.naveJugador.getX();
         this.pantallaJuego.nave = this.pantallaJuego.naveJugador.getBounds();      
@@ -80,13 +68,13 @@ public class NaveJugador extends Thread implements Serializable{
                     for (int j = 0; j < 5; j++){
                         Rectangle Enemigo = this.pantallaJuego.matrizEnemigos.enemigos[i][j].getEnemigo_().getBounds();
                         if (this.pantallaJuego.nave.intersects(Enemigo)){
-                            temporizador.detenerTemporizador();
-                            temporizador.interrupt();
+                            this.pantallaJuego.temporizador.detenerTemporizador();
+                            this.pantallaJuego.temporizador.interrupt();
                             this.pantallaJuego.Item.Detener();
                             this.pantallaJuego.Item.interrupt();
                             this.pantallaJuego.NaveJugador.Detener();
                             this.pantallaJuego.NaveJugador.interrupt();
-                            this.pantallaJuego.Bala.Detener();
+                            this.pantallaJuego.Bala.DetenerBala();
                             this.pantallaJuego.Bala.interrupt();
                             this.pantallaJuego.matrizEnemigos.Detener();
                             this.pantallaJuego.matrizEnemigos.interrupt();
@@ -104,26 +92,26 @@ public class NaveJugador extends Thread implements Serializable{
                         this.pantallaJuego.item.setVisible(false);
                         this.pantallaJuego.item.setLocation(-40, 0);
                         this.pantallaJuego.repaint();
-                        synchronized (listaItems) {
-                            for (int i = 0; i < listaItems.getSize(); i++) {
-                                Item Item_ = listaItems.getItem(i);
+                        synchronized (this.pantallaJuego.listaItems) {
+                            for (int i = 0; i < this.pantallaJuego.listaItems.getSize(); i++) {
+                                Item Item_ = this.pantallaJuego.listaItems.getItem(i);
                                 int Tipo_ = Item_.getTipo();
                                 if (Tipo_ == 1) {
                                     points += 10;
-                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.listaItems.eliminar(i);
                                 } else if (Tipo_ == 2 && points > 0) {
                                     points -= 10;
-                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.listaItems.eliminar(i);
                                 } else if (Tipo_ == 3) {
                                     time += 10;
-                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.listaItems.eliminar(i);
                                     this.pantallaJuego.temporizador.setSegundo(time);
                                 } else if (Tipo_ == 4 && time > 0) {
                                     time -= 10;
                                     if ( time < 0){
                                         time = 0;
                                     }
-                                    listaItems.eliminar(i);
+                                    this.pantallaJuego.listaItems.eliminar(i);
                                     this.pantallaJuego.temporizador.setSegundo(time);
                                 }
                             }

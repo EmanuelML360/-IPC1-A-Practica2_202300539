@@ -1,5 +1,7 @@
 package Pantallas;
 
+import ComponentesDeJuego.AccionesTeclas;
+import Personajes.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -136,7 +139,7 @@ public class PantallaCargaJuego extends JFrame implements Serializable{
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal(1);
                         pantallaPrincipal.setVisible(true);
                         dispose();  
                     }
@@ -176,8 +179,42 @@ public class PantallaCargaJuego extends JFrame implements Serializable{
                 PantallaJuego pantallaJuego = (PantallaJuego) objectInputStream.readObject();
                 objectInputStream.close();
                 fileInputStream.close();
-                pantallaJuego.inicializarDespuesDeDeserializar();
+                
+                Enemigo[][] listaEnemigos= pantallaJuego.matrizEnemigos.enemigos;
+                
+                ArrayList<Item> listaItems_ = pantallaJuego.listaItems.items;
+                
+                NaveJugador naveJugador = pantallaJuego.NaveJugador;
+                
+                Bala Bala = pantallaJuego.Bala;
+                
+                Item Item = pantallaJuego.Item;
+                
+                AccionesTeclas accionesTeclas = pantallaJuego.accionesTeclas;
+                
+                ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/fondo.gif"));
+                Image imgTamaño = img.getImage().getScaledInstance(1280, 630, Image.SCALE_DEFAULT);
+                ImageIcon imgFondo = new ImageIcon(imgTamaño);
+                pantallaJuego.fondo.setIcon(imgFondo);
+                
+                img = new ImageIcon(getClass().getResource("/Imagenes/point.gif"));
+                imgTamaño = img.getImage().getScaledInstance(65, 60, Image.SCALE_DEFAULT);
+                ImageIcon imgPoints = new ImageIcon(imgTamaño);
+                pantallaJuego.pointsImg.setIcon(imgPoints);
+                
+                img = new ImageIcon(getClass().getResource("/Imagenes/Explosion.gif"));
+                imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+                ImageIcon imgExplosion = new ImageIcon(imgTamaño);
+                pantallaJuego.explosion.setIcon(imgExplosion);
+                
+                img = new ImageIcon(getClass().getResource("/Imagenes/Nave.gif"));
+                imgTamaño = img.getImage().getScaledInstance(40, 30, Image.SCALE_DEFAULT);
+                ImageIcon imgNave = new ImageIcon(imgTamaño);
+                pantallaJuego.naveJugador.setIcon(imgNave);
+                
+                pantallaJuego.inicializarDespuesDeDeserializar(listaEnemigos, listaItems_, naveJugador, accionesTeclas, Item, Bala);
                 pantallaJuego.setVisible(true);
+                dispose();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error al cargar la partida: " + e.getMessage());

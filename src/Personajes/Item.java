@@ -16,17 +16,14 @@ import javax.swing.ImageIcon;
 public class Item extends Thread implements Serializable{
     
     PantallaJuego pantallaJuego;
-    ListaItems listaItems = ListaItems.getInstance();
     public int itemY, itemX;
     public volatile boolean activo = true;
     public Random random = new Random();
     private int tipo;
     public int tipo_;
-    int posicion = 0;
     
     public Item(PantallaJuego pantallaJuego){
         this.pantallaJuego = pantallaJuego;
-        this.listaItems = ListaItems.getInstance();
         itemY = this.pantallaJuego.item.getY();
         itemX = this.pantallaJuego.item.getX();
         this.pantallaJuego.item_ = this.pantallaJuego.item.getBounds();
@@ -44,8 +41,8 @@ public class Item extends Thread implements Serializable{
                     this.pantallaJuego.item_ = this.pantallaJuego.item.getBounds();
                     if (itemX < 0){
                         Detener();
-                        for (int i = 0; i < listaItems.getSize() - 1; i++){
-                            listaItems.eliminar(i);
+                        for (int i = 0; i < this.pantallaJuego.listaItems.getSize() - 1; i++){
+                            this.pantallaJuego.listaItems.eliminar(i);
                         }
                         tipo_ = random.nextInt(4) + 1;
                         switch(tipo_){
@@ -54,7 +51,7 @@ public class Item extends Thread implements Serializable{
                                 Image imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                                 ImageIcon imgitem = new ImageIcon(imgTamaño);
                                 this.pantallaJuego.item.setIcon(imgitem);
-                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(590) + 100);
+                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(550) + 100);
                                 this.nuevoItem(1);
                                 break;
                             case 2:
@@ -62,7 +59,7 @@ public class Item extends Thread implements Serializable{
                                 imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                                 ImageIcon imgitem2 = new ImageIcon(imgTamaño);
                                 this.pantallaJuego.item.setIcon(imgitem2);
-                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(590) + 100);
+                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(550) + 100);
                                 this.nuevoItem(2);
                                 break;
                             case 3:
@@ -70,7 +67,7 @@ public class Item extends Thread implements Serializable{
                                 imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                                 ImageIcon imgitem3 = new ImageIcon(imgTamaño);
                                 this.pantallaJuego.item.setIcon(imgitem3);
-                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(590) + 100);
+                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(550) + 100);
                                 this.nuevoItem(3);
                                 break;
                             case 4:
@@ -78,7 +75,7 @@ public class Item extends Thread implements Serializable{
                                 imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
                                 ImageIcon imgitem4 = new ImageIcon(imgTamaño);
                                 this.pantallaJuego.item.setIcon(imgitem4);
-                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(590) + 100);
+                                this.pantallaJuego.item.setLocation(1279, itemY = random.nextInt(550) + 100);
                                 this.nuevoItem(4);
                                 break;
                         }    
@@ -93,8 +90,7 @@ public class Item extends Thread implements Serializable{
     public Item nuevoItem(int tipo){
         Item Item = new Item(pantallaJuego);
         Item.setTipo(tipo);
-        listaItems.agregarItem(Item);
-        posicion++;
+        this.pantallaJuego.listaItems.agregarItem(Item);
         Item.start();
         return Item;
     }

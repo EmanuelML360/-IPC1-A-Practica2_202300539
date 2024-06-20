@@ -3,6 +3,7 @@ package Pantallas;
 import ComponentesDeJuego.*;
 import Personajes.*;
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -21,16 +22,12 @@ public class PantallaJuego extends JFrame {
     public NaveJugador NaveJugador;
     public Bala Bala;
     public Item Item;
-    public MatrizEnemigos matrizEnemigos = MatrizEnemigos.getInstance(this);
-    public ListaItems listaItems = ListaItems.getInstance();
-    public ListaJugadores listaJugadores = ListaJugadores.getInstance();
+    public MatrizEnemigos matrizEnemigos;
+    public ListaItems listaItems;
+    public ListaJugadores listaJugadores;
     public AccionesTeclas accionesTeclas;
     
     public PantallaJuego() {
-        
-        this.matrizEnemigos = MatrizEnemigos.getInstance(this);
-        this.listaItems = ListaItems.getInstance();
-        this.listaJugadores = ListaJugadores.getInstance();
         
         capas = new JLayeredPane();
         this.setContentPane(capas);
@@ -55,6 +52,11 @@ public class PantallaJuego extends JFrame {
         capas.add(naveJugador, Integer.valueOf(3));
         nave = naveJugador.getBounds();
 
+        img = new ImageIcon(getClass().getResource("/Imagenes/Titulo.png"));
+        imgTamaño = img.getImage().getScaledInstance(51, 20, Image.SCALE_DEFAULT);
+        ImageIcon imgIcono = new ImageIcon(imgTamaño);
+        setIconImage(imgIcono.getImage());
+        
         bala = new JLabel();
         bala.setBounds(1280, 370, 30, 30);
         img = new ImageIcon(getClass().getResource("/Imagenes/bala.png"));
@@ -145,52 +147,110 @@ public class PantallaJuego extends JFrame {
     
     public void iniciarJuego(){
         try{
-            this.temporizador = new Temporizador(this);
-            this.temporizador.start();
-            this.matrizEnemigos.crearMatriz();
-            this.matrizEnemigos.start();
-            this.Bala = new Bala(this);
-            this.Bala.start();
-            this.Item = new Item(this);
-            this.Item.start();
-            this.NaveJugador = new NaveJugador(this, temporizador, Bala);
-            this.NaveJugador.start();
-            this.accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
-            this.accionesTeclas.start();
+            
+            if (NaveJugador == null){
+                System.out.println("El hilo ha terminado.");
+                this.temporizador = new Temporizador(this);
+                this.temporizador.start();
+                this.matrizEnemigos = MatrizEnemigos.getInstance(this);
+                this.listaItems = ListaItems.getInstance();
+                this.listaJugadores = ListaJugadores.getInstance();
+                this.matrizEnemigos.crearMatriz();
+                this.matrizEnemigos.start();
+                this.Bala = new Bala(this);
+                this.Bala.start();
+                this.Item = new Item(this);
+                this.Item.start();
+                this.NaveJugador = new NaveJugador(this);
+                this.NaveJugador.start();
+                this.accionesTeclas = new AccionesTeclas(this);
+                this.accionesTeclas.start();         
+            }
+            
+            Thread.State estado = NaveJugador.getState();
+            System.out.println("Estado del hilo: " + estado);
+            
+            if (estado == Thread.State.RUNNABLE) {
+                System.out.println("El hilo está en ejecución.");
+                this.temporizador.activo = true;
+                this.matrizEnemigos.activo = true;
+                this.Bala.activo = true;
+                this.Item.activo = true;
+                this.NaveJugador.activo = true;
+                this.accionesTeclas.start();
+                this.accionesTeclas.activo = true;
+            }
+                
         } catch (Exception e){
             Thread.currentThread().interrupt();
-            this.temporizador.activo = true;
-            this.matrizEnemigos.activo = true;
-            this.Bala.activo = true;
-            this.Item.activo = true;
-            this.NaveJugador.activo = true;
-            this.accionesTeclas.activo = true;
         }
     }
     
-     public void inicializarDespuesDeDeserializar() {
-        this.temporizador = new Temporizador(this);
-        this.temporizador.start();
-        this.temporizador.activo = true;
+     public void inicializarDespuesDeDeserializar(Enemigo[][] listaEnemigos, ArrayList <Item> listaItems_, NaveJugador naveJugador, AccionesTeclas accionesTeclas, Item Item, Bala Bala) {
         
-        this.matrizEnemigos = MatrizEnemigos.getInstance(this);
-        this.matrizEnemigos.start();
-        this.matrizEnemigos.activo = true;
         
-        this.Bala = new Bala(this);
-        this.Bala.start();
-        this.Bala.activo = true;
+        Thread.State estado = NaveJugador.getState();
+
+        if (estado == Thread.State.RUNNABLE) {
+            this.temporizador = new Temporizador(this);
+            this.temporizador.activo = true;
+
+            this.matrizEnemigos.enemigos = listaEnemigos;
+            ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase1.png"));
+            Image imgTamaño = img.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
+            this.matrizEnemigos.enemigo1.setHorizontalAlignment(SwingConstants.CENTER);
+            this.matrizEnemigos.enemigo1.setVerticalAlignment(SwingConstants.CENTER);
+            ImageIcon imgenemigo1 = new ImageIcon(imgTamaño);
+            this.matrizEnemigos.enemigo1.setIcon(imgenemigo1);
+            this.matrizEnemigos.enemigo1.setVisible(true);
+            this.matrizEnemigos.activo = true;
+
+            this.listaItems.items = listaItems_;
+            this.Bala = Bala;
+            this.Bala.activo = true;
+
+            this.Item = Item;
+            this.Item.activo = true;
+
+            this.NaveJugador = naveJugador;
+            this.NaveJugador.activo = true;
+
+            this.accionesTeclas = accionesTeclas;
+            this.accionesTeclas.activo = true;
+        } else {
+            this.temporizador = new Temporizador(this);
+            this.temporizador.start();
+            this.temporizador.activo = true;
+
+            this.matrizEnemigos.enemigos = listaEnemigos;
+            ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase1.png"));
+            Image imgTamaño = img.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
+            this.matrizEnemigos.enemigo1.setHorizontalAlignment(SwingConstants.CENTER);
+            this.matrizEnemigos.enemigo1.setVerticalAlignment(SwingConstants.CENTER);
+            ImageIcon imgenemigo1 = new ImageIcon(imgTamaño);
+            this.matrizEnemigos.enemigo1.setIcon(imgenemigo1);
+            this.matrizEnemigos.enemigo1.setVisible(true);
+            this.matrizEnemigos.start();
+            this.matrizEnemigos.activo = true;
+
+            this.listaItems.items = listaItems_;
+            this.Bala = Bala;
+            this.Bala.start();
+            this.Bala.activo = true;
+
+            this.Item = Item;
+            this.Item.start();
+            this.Item.activo = true;
+
+            this.NaveJugador = naveJugador;
+            this.NaveJugador.start();
+            this.NaveJugador.activo = true;
+
+            this.accionesTeclas = accionesTeclas;
+            this.accionesTeclas.start();
+            this.accionesTeclas.activo = true;
+        }
         
-        this.Item = new Item(this);
-        this.Item.start();
-        this.Item.activo = true;
         
-        this.NaveJugador = new NaveJugador(this, temporizador, Bala);
-        this.NaveJugador.start();
-        this.NaveJugador.activo = true;
-        
-        this.accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
-        this.accionesTeclas.start();
-        this.accionesTeclas.activo = true;
     }
 }

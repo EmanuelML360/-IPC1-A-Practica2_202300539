@@ -23,19 +23,19 @@ public class Serializar implements Serializable{
             String fechaFormateada = new SimpleDateFormat("dd_MM_yyyy_HH_mm").format(new Date());
             
             String basePath = "./Juegos/";
-            String carpetaConFecha = basePath + fechaFormateada;
+            String carpeta = basePath;
             
-            File directorio = new File(carpetaConFecha);
+            File directorio = new File(carpeta);
             if (!directorio.exists()) {
                 if (directorio.mkdirs()) {
-                    System.out.println("Estructura de carpetas creada: " + carpetaConFecha);
+                    System.out.println("Estructura de carpetas creada: " + carpeta);
                 } else {
                     System.err.println("Error al crear la estructura de carpetas.");
                     return;
                 }
             }
             
-            String archivoPath = carpetaConFecha + ".bin";
+            String archivoPath = carpeta + "/" + fechaFormateada + ".bin";
             
             
             

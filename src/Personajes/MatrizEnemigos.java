@@ -3,8 +3,7 @@ package Personajes;
 import Pantallas.*;
 import java.awt.Image;
 import java.io.Serializable;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 /**
  *
@@ -167,19 +166,24 @@ public class MatrizEnemigos extends Thread implements Serializable{
         }
         
         if (todosSonNulos) {
-            this.pantallaJuego.temporizador.detenerTemporizador();
-            this.pantallaJuego.temporizador.interrupt();
-            this.pantallaJuego.Item.Detener();
-            this.pantallaJuego.Item.interrupt();
-            this.pantallaJuego.NaveJugador.Detener();
-            this.pantallaJuego.NaveJugador.interrupt();
-            this.pantallaJuego.Bala.DetenerBala();
-            this.pantallaJuego.Bala.interrupt();
-            this.pantallaJuego.matrizEnemigos.Detener();
-            this.pantallaJuego.matrizEnemigos.interrupt();
-            this.pantallaJuego.dispose();
-            int score_ = Integer.parseInt(this.pantallaJuego.points.getText());
-            VentanaFinal ventanaFinal = new VentanaFinal(score_);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    pantallaJuego.temporizador.detenerTemporizador();
+                    pantallaJuego.temporizador.interrupt();
+                    pantallaJuego.Item.Detener();
+                    pantallaJuego.Item.interrupt();
+                    pantallaJuego.NaveJugador.Detener();
+                    pantallaJuego.NaveJugador.interrupt();
+                    pantallaJuego.Bala.DetenerBala();
+                    pantallaJuego.Bala.interrupt();
+                    pantallaJuego.matrizEnemigos.Detener();
+                    pantallaJuego.matrizEnemigos.interrupt();
+                    pantallaJuego.dispose();
+                    int score_ = Integer.parseInt(pantallaJuego.points.getText());
+                    VentanaFinal ventanaFinal = new VentanaFinal(score_);
+                }
+            });
+            
         }
 
     }

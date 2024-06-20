@@ -13,7 +13,8 @@ public class IPC1APractica2_202300539 {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                PantallaPrincipal nuevaPantalla = new PantallaPrincipal();
+
+                PantallaPrincipal nuevaPantalla = new PantallaPrincipal(0);
                 nuevaPantalla.setVisible(true);
             }
         });

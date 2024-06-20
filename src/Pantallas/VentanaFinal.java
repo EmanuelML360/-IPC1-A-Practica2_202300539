@@ -103,7 +103,7 @@ public class VentanaFinal extends JFrame{
                     public void run() {
                         Jugador jugador;
                         listaJugadores.agregarJugador( jugador = new Jugador(nombre_.getText(), score_));
-                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
+                        PantallaPrincipal pantallaPrincipal = new PantallaPrincipal(1);
                         pantallaPrincipal.setVisible(true);
                         dispose();  
                     }
