@@ -1,7 +1,8 @@
 package Pantallas;
 
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
@@ -9,18 +10,76 @@ import javax.swing.SwingUtilities;
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
-public class PantallaPrincipal extends javax.swing.JFrame {
 
+public class PantallaPrincipal extends javax.swing.JFrame {
+    
     public PantallaPrincipal() {
         
         initComponents();
-        
-        /*
-        ImageIcon fondoImg = new ImageIcon(PantallaPrincipal.class.getResource(""));
-        Image tamañoImg = fondoImg.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        this.setLocationRelativeTo(null);
+
+        ImageIcon Img = new ImageIcon(PantallaPrincipal.class.getResource("/Imagenes/EnemigoClase1.png"));
+        Image tamañoImg = Img.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon img = new ImageIcon(tamañoImg);
         setIconImage(img.getImage());
-*/
+        
+        Img = new ImageIcon(PantallaPrincipal.class.getResource("/Imagenes/EnemigoClase1.png"));
+        tamañoImg = Img.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+        img = new ImageIcon(tamañoImg);
+        navePantalla.setIcon(img);
+        
+        nuevoJuego.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nuevoJuego.setBackground(new Color(100, 149, 160));
+                repaint();
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nuevoJuego.setBackground(new Color(204, 204, 204));
+                repaint();
+            }
+        });
+        
+        cargarJuego.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cargarJuego.setBackground(new Color(100, 149, 160));
+                repaint();
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cargarJuego.setBackground(new Color(204, 204, 204));
+                repaint();
+            }
+        });
+        
+        puntuacionMax.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                puntuacionMax.setBackground(new Color(100, 149, 160));
+                repaint();
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                puntuacionMax.setBackground(new Color(204, 204, 204));
+                repaint();
+            }
+        });
+        
+        salir.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                salir.setBackground(new Color(250, 0, 10));
+                repaint();
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                salir.setBackground(new Color(204, 0, 51));
+                repaint();
+            }
+        });
+
     }
 
     @SuppressWarnings("unchecked")
@@ -34,6 +93,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         nuevoJuego = new javax.swing.JButton();
         Titulo = new javax.swing.JLabel();
         navePantalla = new javax.swing.JLabel();
+        fondoPantalla1 = new javax.swing.JLabel();
         fondoPantalla = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,7 +141,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
         jPanel1.add(puntuacionMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 460, 290, 70));
 
-        nuevoJuego.setBackground(new java.awt.Color(51, 153, 255));
+        nuevoJuego.setBackground(new java.awt.Color(204, 204, 204));
         nuevoJuego.setFont(new java.awt.Font("Unispace", 1, 24)); // NOI18N
         nuevoJuego.setForeground(new java.awt.Color(255, 255, 255));
         nuevoJuego.setText("Nuevo Juego");
@@ -97,14 +157,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         Titulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Titulo.png"))); // NOI18N
         jPanel1.add(Titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
-        jPanel1.add(navePantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 340, 360));
-        jPanel1.add(fondoPantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 720));
+        jPanel1.add(navePantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 390, 300, 300));
+
+        fondoPantalla1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondo.gif"))); // NOI18N
+        jPanel1.add(fondoPantalla1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 500, 500));
+
+        fondoPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondo.gif"))); // NOI18N
+        jPanel1.add(fondoPantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 500));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,20 +185,24 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 dispose();
                 PantallaJuego pantallaJuego = new PantallaJuego();
                 pantallaJuego.setVisible(true);
+                pantallaJuego.iniciarJuego();
             }
         });
     }//GEN-LAST:event_nuevoJuegoActionPerformed
 
     private void cargarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarJuegoActionPerformed
-        
+        this.dispose();
+        PantallaCargaJuego pantallaCargaJuego = new PantallaCargaJuego();
     }//GEN-LAST:event_cargarJuegoActionPerformed
 
     private void puntuacionMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_puntuacionMaxActionPerformed
-        
+        this.dispose();
+        PantallaPuntuacionMax pantallaCargaJuego = new PantallaPuntuacionMax();
     }//GEN-LAST:event_puntuacionMaxActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         dispose();
+        System.exit(0);
     }//GEN-LAST:event_salirActionPerformed
 
     public static void main(String args[]) {
@@ -144,6 +213,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton cargarJuego;
     private javax.swing.JLabel fondoPantalla;
+    private javax.swing.JLabel fondoPantalla1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel navePantalla;
     private javax.swing.JButton nuevoJuego;

@@ -2,22 +2,22 @@ package Personajes;
 
 import Pantallas.PantallaJuego;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.Random;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
 
-public class Bala extends Thread {
+public class Bala extends Thread implements Serializable {
     
-    PantallaJuego pantallaJuego;
+    public PantallaJuego pantallaJuego;
     public int balaY, balaX;
     public volatile boolean activo = true;
-    Random random = new Random();
+    public Random random = new Random();
     
-    public Bala(PantallaJuego pantallaJuego){
+    public Bala(PantallaJuego pantallaJuego){       
         this.pantallaJuego = pantallaJuego;
         balaY = this.pantallaJuego.naveJugador.getY();
         balaX = this.pantallaJuego.bala.getX();  
@@ -28,9 +28,8 @@ public class Bala extends Thread {
             while (activo){
                 sleep(20);
                 if (balaX < 1280){      
-                    balaX += 20;
+                    balaX += 30;
                     this.pantallaJuego.bala.setLocation(balaX, balaY);
-                    this.pantallaJuego.bala.repaint();
                     this.pantallaJuego.bala_ = this.pantallaJuego.bala.getBounds();
                     for (int i = 0; i < 8; i++){
                         for (int j = 0; j < 5; j++){
@@ -38,6 +37,7 @@ public class Bala extends Thread {
                             Rectangle balaRect = this.pantallaJuego.bala_.getBounds();
                             Rectangle enemigoRect = enemigoActual.getEnemigo_();
                             if (balaRect.getBounds().getX() == enemigoRect.getBounds().getX() && balaRect.getBounds().getY() == enemigoRect.getBounds().getY() && enemigoActual.getSalud() > 0){
+                                DetenerBala();
                                 if (this.pantallaJuego.bala.getBounds().getX() == enemigoRect.getBounds().getX() && this.pantallaJuego.bala.getBounds().getY() == enemigoRect.getBounds().getY()){
                                     this.pantallaJuego.capas.remove(this.pantallaJuego.bala);
                                     balaRect.setBounds(0,0,0,0);
@@ -55,15 +55,15 @@ public class Bala extends Thread {
                                 }
                                 if (this.pantallaJuego.matrizEnemigos.enemigos[i][j].getSalud() > 0){
                                     int salud = this.pantallaJuego.matrizEnemigos.enemigos[i][j].getSalud();
-                                salud -= 1;
-                                this.pantallaJuego.matrizEnemigos.enemigos[i][j].setSalud(salud);
-                                Detener();
+                                    salud -= 1;
+                                    this.pantallaJuego.matrizEnemigos.enemigos[i][j].setSalud(salud);
+                                    Detener();
                                 }
                             }
                         }
                     }
-                    if (balaX > 1270){   
-                        Detener();
+                    if (balaX > 1260){   
+                        DetenerBala();
                     }
                 }        
             }   
@@ -78,7 +78,7 @@ public class Bala extends Thread {
         this.pantallaJuego.explosion.setLocation(-40, 0);
         pantallaJuego.explosion.setVisible(false);
         pantallaJuego.capas.add(pantallaJuego.bala);
-        pantallaJuego.bala.setLocation(-40, 0);
+        pantallaJuego.bala.setLocation(1280, 0);
         activo = false;
     }
     

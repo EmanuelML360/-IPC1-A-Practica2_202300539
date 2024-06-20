@@ -1,12 +1,7 @@
 package Pantallas;
 
-import ComponentesDeJuego.AccionesTeclas;
-import ComponentesDeJuego.Temporizador;
-import Personajes.Bala;
-import Personajes.Enemigo;
-import Personajes.Item;
-import Personajes.MatrizEnemigos;
-import Personajes.NaveJugador;
+import ComponentesDeJuego.*;
+import Personajes.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -21,16 +16,22 @@ public class PantallaJuego extends JFrame {
     public JPanel panel;
     public JLayeredPane capas;
     public Enemigo enemigo1, enemigo2, enemigo3;
-    public Rectangle nave, item_, bala_, enemigo_;
+    public Rectangle nave, item_, bala_;
     public Temporizador temporizador;
     public NaveJugador NaveJugador;
     public Bala Bala;
     public Item Item;
     public MatrizEnemigos matrizEnemigos = MatrizEnemigos.getInstance(this);
+    public ListaItems listaItems = ListaItems.getInstance();
+    public ListaJugadores listaJugadores = ListaJugadores.getInstance();
     public AccionesTeclas accionesTeclas;
     
     public PantallaJuego() {
+        
         this.matrizEnemigos = MatrizEnemigos.getInstance(this);
+        this.listaItems = ListaItems.getInstance();
+        this.listaJugadores = ListaJugadores.getInstance();
+        
         capas = new JLayeredPane();
         this.setContentPane(capas);
         
@@ -40,39 +41,12 @@ public class PantallaJuego extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setVisible(true);
-        
-        enemigo1 = new Enemigo(2, 10, 1);
-        ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase1.png"));
-        Image imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-        enemigo1.setHorizontalAlignment(SwingConstants.CENTER);
-        enemigo1.setVerticalAlignment(SwingConstants.CENTER);
-        ImageIcon imgenemigo1 = new ImageIcon(imgTamaño);
-        enemigo1.setIcon(imgenemigo1);
-        enemigo1.setVisible(true);
-        
-        enemigo2 = new Enemigo(3, 20,2);
-        img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase2.png"));
-        imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-        enemigo2.setHorizontalAlignment(SwingConstants.CENTER);
-        enemigo2.setVerticalAlignment(SwingConstants.CENTER);
-        ImageIcon imgenemigo2 = new ImageIcon(imgTamaño);
-        enemigo2.setIcon(imgenemigo2);
-        enemigo2.setVisible(true);
-        
-        enemigo3 = new Enemigo(4, 30,3);
-        img = new ImageIcon(getClass().getResource("/Imagenes/EnemigoClase3.png"));
-        imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-        enemigo3.setHorizontalAlignment(SwingConstants.CENTER);
-        enemigo3.setVerticalAlignment(SwingConstants.CENTER);
-        ImageIcon imgenemigo3 = new ImageIcon(imgTamaño);
-        enemigo3.setIcon(imgenemigo3);
-        enemigo3.setVisible(true);
+        this.setVisible(true);        
         
         naveJugador = new JLabel();
-        naveJugador.setBounds(30, 330, 40, 40);
-        img = new ImageIcon(getClass().getResource("/Imagenes/Nave.gif"));
-        imgTamaño = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+        naveJugador.setBounds(30, 333, 40, 40);
+        ImageIcon img = new ImageIcon(getClass().getResource("/Imagenes/Nave.gif"));
+        Image imgTamaño = img.getImage().getScaledInstance(40, 30, Image.SCALE_DEFAULT);
         naveJugador.setHorizontalAlignment(SwingConstants.CENTER);
         naveJugador.setVerticalAlignment(SwingConstants.CENTER);
         ImageIcon imgNave = new ImageIcon(imgTamaño);
@@ -82,7 +56,7 @@ public class PantallaJuego extends JFrame {
         nave = naveJugador.getBounds();
 
         bala = new JLabel();
-        bala.setBounds(1280, 370, 40, 40);
+        bala.setBounds(1280, 370, 30, 30);
         img = new ImageIcon(getClass().getResource("/Imagenes/bala.png"));
         imgTamaño = img.getImage().getScaledInstance(51, 20, Image.SCALE_DEFAULT);
         bala.setHorizontalAlignment(SwingConstants.CENTER);
@@ -167,37 +141,56 @@ public class PantallaJuego extends JFrame {
         pointsImg.setIcon(imgPoints);
         capas.add(pointsImg,Integer.valueOf(3));
         
-        iniciarJuego();
     }
     
     public void iniciarJuego(){
         try{
-        temporizador = new Temporizador(this);
-        temporizador.start();
-        matrizEnemigos.crearMatriz();
-        matrizEnemigos.start();
-        Bala = new Bala(this);
-        Bala.start();
-        Item = new Item(this);
-        Item.start();
-        NaveJugador = new NaveJugador(this, temporizador, Bala);
-        NaveJugador.start();
-        accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
-        accionesTeclas.start();
+            this.temporizador = new Temporizador(this);
+            this.temporizador.start();
+            this.matrizEnemigos.crearMatriz();
+            this.matrizEnemigos.start();
+            this.Bala = new Bala(this);
+            this.Bala.start();
+            this.Item = new Item(this);
+            this.Item.start();
+            this.NaveJugador = new NaveJugador(this, temporizador, Bala);
+            this.NaveJugador.start();
+            this.accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
+            this.accionesTeclas.start();
         } catch (Exception e){
             Thread.currentThread().interrupt();
-            temporizador = new Temporizador(this);
-            temporizador.start();
-            matrizEnemigos.crearMatriz();
-            matrizEnemigos.start();
-            Bala = new Bala(this);
-            Bala.start();
-            Item = new Item(this);
-            Item.start();
-            NaveJugador = new NaveJugador(this, temporizador, Bala);
-            NaveJugador.start();
-            accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
-            accionesTeclas.start();
+            this.temporizador.activo = true;
+            this.matrizEnemigos.activo = true;
+            this.Bala.activo = true;
+            this.Item.activo = true;
+            this.NaveJugador.activo = true;
+            this.accionesTeclas.activo = true;
         }
-    }   
+    }
+    
+     public void inicializarDespuesDeDeserializar() {
+        this.temporizador = new Temporizador(this);
+        this.temporizador.start();
+        this.temporizador.activo = true;
+        
+        this.matrizEnemigos = MatrizEnemigos.getInstance(this);
+        this.matrizEnemigos.start();
+        this.matrizEnemigos.activo = true;
+        
+        this.Bala = new Bala(this);
+        this.Bala.start();
+        this.Bala.activo = true;
+        
+        this.Item = new Item(this);
+        this.Item.start();
+        this.Item.activo = true;
+        
+        this.NaveJugador = new NaveJugador(this, temporizador, Bala);
+        this.NaveJugador.start();
+        this.NaveJugador.activo = true;
+        
+        this.accionesTeclas = new AccionesTeclas(this, temporizador, NaveJugador, Bala, matrizEnemigos);
+        this.accionesTeclas.start();
+        this.accionesTeclas.activo = true;
+    }
 }

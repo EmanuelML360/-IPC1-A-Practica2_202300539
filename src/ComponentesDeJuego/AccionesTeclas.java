@@ -1,12 +1,13 @@
 package ComponentesDeJuego;
 
-import AccionesArchivos.CreacionArchivos;
+import AccionesArchivos.*;
 import Pantallas.PantallaJuego;
 import Pantallas.PantallaPrincipal;
 import Personajes.Bala;
 import Personajes.MatrizEnemigos;
 import Personajes.NaveJugador;
 import java.awt.event.ActionEvent;
+import java.io.Serializable;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -16,10 +17,11 @@ import javax.swing.KeyStroke;
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
-public class AccionesTeclas extends Thread {
+
+public class AccionesTeclas extends Thread implements Serializable{
     
     public MatrizEnemigos matrizEnemigos;
-    public CreacionArchivos creacionArchivos;
+    public Serializar serializar;
     public PantallaJuego pantallaJuego;
     public NaveJugador naveJugador;
     public Temporizador temporizador; 
@@ -42,10 +44,21 @@ public class AccionesTeclas extends Thread {
                 this.pantallaJuego.panel.getActionMap().put("sAction", new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        creacionArchivos = new CreacionArchivos("Hola mundo");
-                        creacionArchivos.CrearArchivo();
                         temporizador.detenerTemporizador();
-                        naveJugador.Detener();
+                        temporizador.interrupt();
+                        pantallaJuego.Item.Detener();
+                        pantallaJuego.Item.interrupt();
+                        pantallaJuego.NaveJugador.Detener();
+                        pantallaJuego.NaveJugador.interrupt();
+                        pantallaJuego.Bala.DetenerBala();
+                        pantallaJuego.Bala.interrupt();
+                        pantallaJuego.matrizEnemigos.Detener();
+                        pantallaJuego.matrizEnemigos.interrupt();
+                        pantallaJuego.accionesTeclas.Detener();
+                        pantallaJuego.accionesTeclas.interrupt();
+                        pantallaJuego.dispose();
+                        serializar = new Serializar(pantallaJuego);
+                        serializar.EscribirArchivoBIN();
                         PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
                         pantallaPrincipal.setVisible(true);
                         pantallaJuego.dispose();    
@@ -56,13 +69,17 @@ public class AccionesTeclas extends Thread {
                     @Override
                     public void actionPerformed(ActionEvent e) {  
                         temporizador.detenerTemporizador();
-                        temporizador.currentThread().interrupt();
+                        temporizador.interrupt();
                         naveJugador.Detener();
-                        naveJugador.currentThread().interrupt();
+                        naveJugador.interrupt();
                         bala.DetenerBala();
-                        bala.currentThread().interrupt();
+                        bala.interrupt();
                         matrizEnemigos.Detener();
-                        matrizEnemigos.currentThread().interrupt();
+                        matrizEnemigos.interrupt();
+                        pantallaJuego.Item.Detener();
+                        pantallaJuego.Item.interrupt();
+                        Detener();
+                        interrupt();
                         PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
                         pantallaPrincipal.setVisible(true);
                         pantallaJuego.removeAll();
@@ -71,7 +88,10 @@ public class AccionesTeclas extends Thread {
                 });  
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
         }
+    }
+    
+    public void Detener(){
+        activo = false;
     }
 }

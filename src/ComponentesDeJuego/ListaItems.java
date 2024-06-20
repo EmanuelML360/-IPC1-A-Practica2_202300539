@@ -1,6 +1,7 @@
 package ComponentesDeJuego;
 
 import Personajes.Item;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @author José Emanuel Monzón Lémus - 202300539
  */
 
-public class ListaItems {
+public class ListaItems implements Serializable{
     
     public ArrayList <Item> items;
     public static ListaItems instance;

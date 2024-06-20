@@ -1,17 +1,18 @@
 package ComponentesDeJuego;
 
 import Pantallas.PantallaJuego;
-import Personajes.*;
+import Pantallas.VentanaFinal;
+import java.io.Serializable;
 
 /**
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
-public class Temporizador extends Thread {
+
+public class Temporizador extends Thread implements Serializable {
     
     public PantallaJuego pantallaJuego;
-    public NaveJugador naveJugador;
-    private volatile boolean activo = true;
+    public volatile boolean activo = true;
     public int segundos = 90;
     
     public Temporizador(PantallaJuego pantallaJuego){
@@ -25,9 +26,20 @@ public class Temporizador extends Thread {
             while (activo) {
                 sleep(1000);
                 segundos--;
-                if (segundos == 0) {
+                if (segundos <= 0) {
                     detenerTemporizador();
-                    naveJugador.Detener();
+                    this.interrupt();
+                    this.pantallaJuego.Item.Detener();
+                    this.pantallaJuego.Item.interrupt();
+                    this.pantallaJuego.NaveJugador.Detener();
+                    this.pantallaJuego.NaveJugador.interrupt();
+                    this.pantallaJuego.Bala.Detener();
+                    this.pantallaJuego.Bala.interrupt();
+                    this.pantallaJuego.matrizEnemigos.Detener();
+                    this.pantallaJuego.matrizEnemigos.interrupt();
+                    this.pantallaJuego.dispose();
+                    int score_ = Integer.parseInt(this.pantallaJuego.points.getText());
+                    VentanaFinal ventanaFinal = new VentanaFinal(score_);
                 }
                 actualizarTemporizador();
             }

@@ -3,17 +3,17 @@ package Personajes;
 import ComponentesDeJuego.ListaItems;
 import Pantallas.PantallaJuego;
 import java.awt.Image;
+import java.io.Serializable;
 import static java.lang.Thread.sleep;
 import java.util.Random;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
 
-public class Item extends Thread {
+public class Item extends Thread implements Serializable{
     
     PantallaJuego pantallaJuego;
     ListaItems listaItems = ListaItems.getInstance();

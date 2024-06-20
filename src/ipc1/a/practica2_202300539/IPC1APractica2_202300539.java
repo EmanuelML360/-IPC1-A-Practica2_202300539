@@ -1,6 +1,7 @@
 package ipc1.a.practica2_202300539;
 
 import Pantallas.PantallaPrincipal;
+import Pantallas.VentanaFinal;
 import javax.swing.*;
 
 /**

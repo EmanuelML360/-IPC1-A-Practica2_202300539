@@ -1,13 +1,15 @@
 package Personajes;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import javax.swing.JLabel;
 
 /**
  *
  * @author José Emanuel Monzón Lémus - 202300539
  */
-public class Enemigo extends JLabel {
+
+public class Enemigo extends JLabel implements Serializable{
     
     private int salud;
     private int puntos;
@@ -19,7 +21,6 @@ public class Enemigo extends JLabel {
         this.salud = salud;
         this.tipo = tipo;
     }
-    
     
     public int getSalud(){
         return salud;
@@ -46,10 +47,13 @@ public class Enemigo extends JLabel {
     }
     
     public Rectangle getEnemigo_() {
-    return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-}
-
+        return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
     
+    public Rectangle getEnemigo__(){
+        return enemigo_;
+    }
+
     public void setEnemigo_(Rectangle aEnemigo_){
         this.enemigo_ = aEnemigo_;
     }
