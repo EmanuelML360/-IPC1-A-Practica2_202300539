@@ -15,7 +15,7 @@ import javax.swing.*;
 public class NaveJugador extends Thread implements Serializable{
     
     public PantallaJuego pantallaJuego;
-    public int posicionY, posicionX, points, time;;
+    public int posicionY, posicionX, points, time;
     public volatile boolean activo = true;
     
     public NaveJugador(PantallaJuego pantallaJuego){

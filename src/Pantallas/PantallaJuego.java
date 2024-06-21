@@ -16,7 +16,6 @@ public class PantallaJuego extends JFrame {
     public JLabel naveJugador, time, timeImg, points, pointsImg , fondo, bala, item, explosion;
     public JPanel panel;
     public JLayeredPane capas;
-    public Enemigo enemigo1, enemigo2, enemigo3;
     public Rectangle nave, item_, bala_;
     public Temporizador temporizador;
     public NaveJugador NaveJugador;
